@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:tc_serverside_plugin/events/TCCustomEvent.dart';
 // import 'package:tc_serverside_plugin/events/TCLoginEvent.dart';
 import 'package:tc_serverside_plugin/tc_serverside.dart';
@@ -6,18 +7,22 @@ import 'dart:io' show Platform;
 class TC {
   TCServerside serverside = TCServerside();
 
-  static int TC_SITE_ID = 0000; // defines this site account ID
-  static int TC_PRIVACY_ID = 0; // defines this privacy ID
-  static String sourceKey = "xxxxxxxxxxxxxxxxxxxx";
+  late TCObserver tcObserver;
 
-  TC() {
+  TC({required int siteId, required int privacyId, required String sourceKey}) {
+    tcObserver = TCObserver(tc: this);
+
     if (Platform.isAndroid || Platform.isIOS) {
       try {
-        serverside.initServerSide(TC.TC_SITE_ID, TC.sourceKey);
+        serverside.initServerSide(siteId, sourceKey);
       } catch (e) {
         print(e.toString());
       }
     }
+  }
+
+  TCObserver getTCObserver() {
+    return tcObserver;
   }
 
   Future<void> sendCustomEvent(
@@ -29,7 +34,7 @@ class TC {
     if (Platform.isAndroid || Platform.isIOS) {
       try {
         Future<void>.delayed(
-          const Duration(milliseconds: 10),
+          const Duration(milliseconds: 100),
           () async {
             serverside.execute(makeTCCustomEvent(
                 key: key, value: value, page_name: page_name));
@@ -68,6 +73,55 @@ class TC {
       event.addAdditionalProperty(key, value);
     }
     event.addAdditionalProperty("test_code", "test_code_value");
+    return event;
+  }
+}
+
+class TCObserver extends NavigatorObserver {
+  late TC tc;
+  TCObserver({required this.tc});
+
+  @override
+  void didPush(Route<dynamic> route, Route<dynamic>? previousRoute) {
+    Map<String, dynamic> event = makeEvent("didPush", route, previousRoute);
+
+    tc.sendCustomEvent(
+        page_name: route.settings.name!, key: "GoRoute", value: event);
+  }
+
+  @override
+  void didPop(Route<dynamic> route, Route<dynamic>? previousRoute) {
+    Map<String, dynamic> event = makeEvent("didPop", route, previousRoute);
+
+    tc.sendCustomEvent(
+        page_name: route.settings.name!, key: "GoRoute", value: event);
+  }
+
+  @override
+  void didRemove(Route<dynamic> route, Route<dynamic>? previousRoute) {
+    Map<String, dynamic> event = makeEvent("didRemove", route, previousRoute);
+
+    tc.sendCustomEvent(
+        page_name: route.settings.name!, key: "GoRoute", value: event);
+  }
+
+  @override
+  void didReplace({Route<dynamic>? newRoute, Route<dynamic>? oldRoute}) {
+    Map<String, dynamic> event = makeEvent("didReplace", newRoute!, oldRoute);
+
+    tc.sendCustomEvent(
+        page_name: newRoute.settings.name!, key: "GoRoute", value: event);
+  }
+
+  Map<String, dynamic> makeEvent(
+      String action, Route<dynamic> route, Route<dynamic>? previousRoute) {
+    Map<String, dynamic> event = {
+      "action": action,
+      "arguments": route.settings.arguments
+    };
+    if (previousRoute != null) {
+      event["previous_route"] = previousRoute.settings.name;
+    }
     return event;
   }
 }

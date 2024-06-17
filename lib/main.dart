@@ -1,12 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+/*
+   ==> note for CommandersAct
+  import TC !
+*/
 import 'tc.dart';
 
-/// This sample app shows an app with two screens.
+/// This sample app shows an app with two screens, but three routes.
 ///
 /// The first route '/' is mapped to [HomeScreen], and the second route
 /// '/details' is mapped to [DetailsScreen].
+/// 'details_with_id/:id' is mapped to [DetailsScreen] with id as a parameter.
 ///
 /// The buttons use context.go() to navigate to each destination. On mobile
 /// devices, each destination is deep-linkable and on the web, can be navigated
@@ -17,7 +22,13 @@ late TC tc;
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  tc = TC();
+
+  /*
+    ==> note for CommandersAct
+    init TC !
+  */
+  tc = TC(
+      siteId: 0000, privacyId: 0, sourceKey: "xxxxx-xxxx-xxxx-xxxxxxxxxxxxxx");
 
   return runApp(const MyApp());
 }
@@ -46,7 +57,11 @@ final GoRouter _router = GoRouter(
       ],
     ),
   ],
-  observers: [TCObserver()],
+  /*
+     ==> note for CommandersAct
+    tc.getTCObserver()
+  */
+  observers: [tc.getTCObserver()],
 );
 
 /// The main app.
@@ -121,51 +136,5 @@ class DetailsScreenState extends State<DetailsScreen> {
         ),
       ),
     );
-  }
-}
-
-class TCObserver extends NavigatorObserver {
-  @override
-  void didPush(Route<dynamic> route, Route<dynamic>? previousRoute) {
-    Map<String, dynamic> event = makeEvent("didPush", route, previousRoute);
-
-    tc.sendCustomEvent(
-        page_name: route.settings.name!, key: "GoRoute", value: event);
-  }
-
-  @override
-  void didPop(Route<dynamic> route, Route<dynamic>? previousRoute) {
-    Map<String, dynamic> event = makeEvent("didPop", route, previousRoute);
-
-    tc.sendCustomEvent(
-        page_name: route.settings.name!, key: "GoRoute", value: event);
-  }
-
-  @override
-  void didRemove(Route<dynamic> route, Route<dynamic>? previousRoute) {
-    Map<String, dynamic> event = makeEvent("didRemove", route, previousRoute);
-
-    tc.sendCustomEvent(
-        page_name: route.settings.name!, key: "GoRoute", value: event);
-  }
-
-  @override
-  void didReplace({Route<dynamic>? newRoute, Route<dynamic>? oldRoute}) {
-    Map<String, dynamic> event = makeEvent("didReplace", newRoute!, oldRoute);
-
-    tc.sendCustomEvent(
-        page_name: newRoute.settings.name!, key: "GoRoute", value: event);
-  }
-
-  Map<String, dynamic> makeEvent(
-      String action, Route<dynamic> route, Route<dynamic>? previousRoute) {
-    Map<String, dynamic> event = {
-      "action": action,
-      "arguments": route.settings.arguments
-    };
-    if (previousRoute != null) {
-      event["previous_route"] = previousRoute.settings.name;
-    }
-    return event;
   }
 }
