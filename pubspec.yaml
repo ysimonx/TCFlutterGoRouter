@@ -1,4 +1,4 @@
-name: tcgorouter
+name: TCFlutterGoRouter
 description: "TC with GoRouter"
 
 # The following line prevents the package from being accidentally published to
