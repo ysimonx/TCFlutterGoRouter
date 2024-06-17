@@ -10,11 +10,23 @@ https://github.com/ysimonx/TCFlutterGoRouter/assets/1449867/ff6ce389-844c-4aa8-9
 
 # Install
 
-1 - import tc.dart
+1 - add lib to pubspec.yaml
 
+code:
 
+    tc_serverside_plugin:
+    
+          git:
+    
+                  url: https://github.com/CommandersAct/tcserverside-flutter-plugin.git
+      
+                  ref: 1.1.0-idfa
+      
+   
 
-2 - init tc variable with site_id
+2 - import tc.dart
+
+3 - init tc variable with site_id
 
 tc = TC(
       siteId: xxxx,
@@ -22,5 +34,5 @@ tc = TC(
       sourceKey: "xxxxxx-xxxx-xxxx-xxxxxxx");
 
 
-3 - add tc.getObserver() to GoRouter
+4 - add tc.getObserver() to GoRouter
 
