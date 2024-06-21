@@ -27,8 +27,7 @@ void main() {
     ==> note for CommandersAct
     init TC !
   */
-  tc = TC(
-      siteId: 0000, privacyId: 0, sourceKey: "xxxxx-xxxx-xxxx-xxxxxxxxxxxxxx");
+  tc = TC(siteId: xxxx, privacyId: 6, sourceKey: "xxxxx-xxxxx-xxxxx");
 
   return runApp(const MyApp());
 }
@@ -38,18 +37,21 @@ final GoRouter _router = GoRouter(
   routes: <RouteBase>[
     GoRoute(
       path: '/',
+      name: 'accueil',
       builder: (BuildContext context, GoRouterState state) {
         return const HomeScreen();
       },
       routes: <RouteBase>[
         GoRoute(
           path: 'details',
+          name: 'details',
           builder: (BuildContext context, GoRouterState state) {
             return const DetailsScreen();
           },
         ),
         GoRoute(
           path: 'details_with_id/:id',
+          name: 'details with id',
           builder: (BuildContext context, GoRouterState state) {
             return DetailsScreen(id: state.pathParameters["id"]);
           },
