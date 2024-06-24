@@ -34,7 +34,7 @@ void main() {
       sourceKey: "cbd9693f-37c9-4130-92d7-9f77b835c991");
 
   TCDebug().setDebugLevel(TCLogLevel.TCLogLevel_Verbose);
-
+  TCDebug().setNotificationLog(true);
   return runApp(const MyApp());
 }
 
