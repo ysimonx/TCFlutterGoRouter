@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
   import TC !
 */
 import 'tc.dart';
+import 'package:tccore_plugin/TCDebug.dart';
 
 /// This sample app shows an app with two screens, but three routes.
 ///
@@ -27,7 +28,12 @@ void main() {
     ==> note for CommandersAct
     init TC !
   */
-  tc = TC(siteId: xxxx, privacyId: 6, sourceKey: "xxxxx-xxxxx-xxxxx");
+  tc = TC(
+      siteId: 7244,
+      privacyId: 6,
+      sourceKey: "cbd9693f-37c9-4130-92d7-9f77b835c991");
+
+  TCDebug().setDebugLevel(TCLogLevel.TCLogLevel_Verbose);
 
   return runApp(const MyApp());
 }
@@ -59,10 +65,6 @@ final GoRouter _router = GoRouter(
       ],
     ),
   ],
-  /*
-     ==> note for CommandersAct
-    tc.getTCObserver()
-  */
   observers: [tc.getTCObserver()],
 );
 

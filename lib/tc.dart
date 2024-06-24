@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:tc_serverside_plugin/events/TCCustomEvent.dart';
+// ignore: depend_on_referenced_packages
+
 // import 'package:tc_serverside_plugin/events/TCLoginEvent.dart';
+
 import 'package:tc_serverside_plugin/tc_serverside.dart';
+
 import 'dart:io' show Platform;
 
 class TC {
